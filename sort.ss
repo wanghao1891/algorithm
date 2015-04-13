@@ -15,8 +15,8 @@
 	(loop _ls-tmp '() _ls-need '() _num))
        ((and (null? _ls) (null? _ls-tmp))
 	(display _num)
-	(append (cons _cur '()) _ls-need))
-       (else
+ 	(append (cons _cur '()) _ls-need))
+       (else ;compare list element and get a sublist that need to compare.
 	;(display _pre) (newline)
 	(let ((_pre _cur)
 	      (_cur (car _ls)))
@@ -38,3 +38,33 @@
 
 ;(null? (vector))
 
+
+;Insertion
+(define insertion
+  (lambda (ls)
+    (let loop ((input ls)
+	       (sorted '()))
+      (cond
+       ((null? input) sorted)
+       (else
+	(display (car input)) (newline)
+	(if (null? sorted)
+	    (set! sorted (cons (car input) sorted))
+	    (set! sorted (insertion-compare sorted (car input))))
+	;(display sorted)
+	(loop (cdr input) sorted))))))
+
+(define insertion-compare
+  (lambda (ls element)
+    (cond
+     ((null? ls) (list element))
+     ((<= element (car ls))
+      (cons element ls))
+     (else
+      (cons (car ls) (insertion-compare (cdr ls) element))))))
+
+(insertion-compare '(1 2 4 5 6) 3)
+
+(insertion-compare '(1) 10)
+
+(insertion '(1 10 7 6 20 8 9 3))
